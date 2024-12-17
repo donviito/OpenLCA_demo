@@ -1,0 +1,7 @@
+openlca:
+  ipc_port: 8080  # Default port for OpenLCA IPC server
+
+databricks:
+  table_name: 'lca_test.bronze.chemical_classification1'
+  result_table_name: 'lca_test.bronze.resultstable'
+  electricity_table_name: 'lca_test.bronze.electricityconsumption'
