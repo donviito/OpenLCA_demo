@@ -1,8 +1,8 @@
 # Databricks and OpenLCA Integration Documentation
 
-This documentation outlines the steps to set up and execute an automated Life Cycle Assessment (LCA) workflow using Databricks and OpenLCA. The solution integrates data handling through Databricks and calculation via OpenLCA's IPC server, ensuring dynamic and automated assessments.
+This documentation outlines the steps to set up and execute an automated Life Cycle Assessment (LCA) workflow using Databricks and OpenLCA. The solution integrates data handling through Databricks and calculation via OpenLCA's IPC server.
 
-**Note:** This is a high-level demo showcasing how LCA calculations can be somewhat automated using OpenLCA. It is not a production-ready implementation.
+**Note:** This is a high-level demo showcasing how LCA calculations can be somewhat automated using OpenLCA. It is not even close to a production-ready implementation.
 
 ## Overview
 
@@ -13,9 +13,8 @@ This example is tailored for **Mirka** as part of the **Data-Driven Sustainabili
 - To showcase dynamic calculations, the raw material data for one product is used, while different electricity values are queried from another table. Results are written to a Delta table in Databricks.
 - For this example to work, the flow names in Databricks must match those in the LCI database opened in OpenLCA. For further enhancement, this matching should be based on unique identifiers, such as CAS numbers.
 
-This example is tailored for **Mirka** as part of the **Data-Driven Sustainability Management project** to demonstrate how LCA can be automated using Databricks and OpenLCA.
 
-The solution leverages:
+The solution uses:
 
 1. **Databricks Connect** for interacting with Databricks clusters.
 2. **OpenLCA IPC** for performing LCA calculations programmatically.
@@ -30,8 +29,7 @@ The solution leverages:
 - Databricks Connect
 - OpenLCA (with IPC server enabled)
 - Libraries:
-  - `databricks-connect`
-  - `pyyaml`
+  - defined in **requirements.txt**
   - OpenLCA schema definitions
 
 ### Databricks Setup
@@ -40,7 +38,6 @@ The solution leverages:
 3. Cluster ID where jobs will run.
 
 ### OpenLCA Setup
-- **IPC Server Requirement:** Ensure the OpenLCA IPC server is running on the specified port before attempting to connect. This is crucial for the script to interact with OpenLCA for LCA calculations.
 - **IPC Server Requirement:** Ensure the OpenLCA IPC server is running on the specified port before attempting to connect. This is crucial for the script to interact with OpenLCA for LCA calculations.
 - OpenLCA installed and configured.
 - IPC server enabled with a specific port.
@@ -142,18 +139,6 @@ A sample result row stored in the Delta table:
 
 ---
 
-## Error Handling
-
-### Common Errors
-1. **Missing Environment Variables**:
-   Ensure all required variables are set in your environment.
-
-2. **Configuration Errors**:
-   Verify the `config.yaml` structure and values.
-
-3. **OpenLCA Connection Issues**:
-   Check that the IPC server is running on the specified port.
-
 ### Logs
 All events and errors are logged for debugging:
 
@@ -162,18 +147,6 @@ All events and errors are logged for debugging:
 
 ---
 
-## Extending the Solution
-
-1. **New Data Flows**:
-   Modify `DataHandler` to handle additional data sources.
-
-2. **Custom Impact Methods**:
-   Update the `impact_method_name` in `config.yaml`.
-
-3. **Additional Metrics**:
-   Extend `LCACalculator` to capture other environmental impacts.
-
----
 
 ## Security Recommendations
 - Avoid exposing sensitive configurations or tokens.
