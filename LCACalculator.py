@@ -6,9 +6,10 @@ import DataHandler
 import LCAConfig
 
 class LCACalculator:
-    def __init__(self, olca_client: OpenLCAClient, data_handler: DataHandler):
+    def __init__(self, olca_client: OpenLCAClient, data_handler: DataHandler, olca_config: dict):
         self.olca_client = olca_client
         self.data_handler = data_handler
+        self.olca_config = olca_config
 
     def calculate_for_products(self, main_table: str, result_table_name: str, electricity_table_name: str):
         """
@@ -41,17 +42,20 @@ class LCACalculator:
         product_name = product_names[0]
         logging.info(f"Using product name: {product_name}")
 
+        # Retrieve flow name and unit from config
+        electricity_flow_name = self.olca_config['electricity_flow_name']
+        electricity_unit = self.olca_config['electricity_unit']
+
         # Iterate over the electricity table
         for idx, electricity_row in electricity_df.iterrows():
             electricity_value = electricity_row["Per1000mElectricityConsumption"]
-            logging.info(f"Running LCA for electricity value: {electricity_value} MJ")
+            logging.info(f"Running LCA for electricity value: {electricity_value} {electricity_unit}")
 
-        
             main_df_with_electricity = main_df.copy()
 
-            # Hard coded electricity for demo purposes
+            # Update existing electricity flow or add a new one
             electricity_index = main_df_with_electricity[
-                main_df_with_electricity["Flow"] == "electricity, low voltage, production FI, at grid/kWh/FI U"
+                main_df_with_electricity["Flow"] == electricity_flow_name
             ].index
 
             if not electricity_index.empty:
@@ -60,9 +64,9 @@ class LCACalculator:
             else:
                 # Add a new electricity flow if it doesn't exist
                 electricity_flow = {
-                    "Flow": "electricity, low voltage, production FI, at grid/kWh/FI U",
+                    "Flow": electricity_flow_name,
                     "Amount": electricity_value,
-                    "Unit": "MJ"
+                    "Unit": electricity_unit
                 }
                 electricity_row_df = pd.DataFrame([electricity_flow])
                 main_df_with_electricity = pd.concat([main_df_with_electricity, electricity_row_df], ignore_index=True)
@@ -97,7 +101,6 @@ class LCACalculator:
                 "ElectricityValue": electricity_value,
                 "CO2Emissions": total_co2_emissions
             })
-
 
         # Convert results to a DataFrame
         results_df = pd.DataFrame(results)

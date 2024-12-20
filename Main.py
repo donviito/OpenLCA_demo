@@ -27,7 +27,11 @@ def main():
 
     olca_client = OpenLCAClient.OpenLCAClient(config_data['openlca']['ipc_port'])
 
-    lca_calculator = LCACalculator.LCACalculator(olca_client, data_handler)
+    lca_calculator = LCACalculator.LCACalculator(
+        olca_client,
+        data_handler,
+        config_data['openlca']
+    )
 
     try:
         # Perform LCA calculations
@@ -36,8 +40,8 @@ def main():
             result_table_name=config_data['databricks']['result_table_name'],
             electricity_table_name=config_data['databricks']['electricity_table_name']
         )
+
     finally:
-        # Close OpenLCA client
         # olca_client.close()
         logging.info("Done")
 

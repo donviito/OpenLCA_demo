@@ -1,5 +1,8 @@
 openlca:
   ipc_port: 8080  # Default port for OpenLCA IPC server
+  impact_method_name: "ReCiPe 2016 Midpoint (H)"
+  electricity_flow_name: "electricity, low voltage, production FI, at grid/kWh/FI U" #Hard coded for demo purposes
+  electricity_unit: "MJ"
 
 databricks:
   table_name: 'lca_test.bronze.chemical_classification1'

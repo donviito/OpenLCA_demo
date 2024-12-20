@@ -3,3 +3,4 @@ olca-ipc
 olca-schema
 pandas
 PyYAML
+dotenv

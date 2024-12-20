@@ -249,22 +249,16 @@ class OpenLCAClient:
 
 
     def get_impact_method_with_gwp(self) -> o.ImpactMethod:
-        # Retrieve all impact method descriptors
+        target_method_name = self.config['impact_method_name']  # From config
+
         impact_methods = self.client.get_descriptors(o.ImpactMethod)
-        logging.debug(f"Available impact methods: {[im.name for im in impact_methods]}")
-
-        # Specify the exact method name
-        target_method_name = "ReCiPe 2016 Midpoint (H)"
-
         for im_desc in impact_methods:
             if im_desc.name == target_method_name:
-                im = self.client.get(o.ImpactMethod, im_desc.id)
-                logging.info(f"Found impact method '{im.name}' with ID: {im.id}")
-                return im
-        
-        # Log all available impact methods if the target is not found
-        logging.error(f"Impact method '{target_method_name}' not found. Available methods: {[im.name for im in impact_methods]}")
-        raise Exception(f"Impact method '{target_method_name}' not found in the database.")
+                return self.client.get(o.ImpactMethod, im_desc.id)
+
+        raise Exception(f"Impact method '{target_method_name}' not found.")
+    
+
 
     def perform_lca_calculation(self, product_system_ref: o.Ref) -> float:
         """
